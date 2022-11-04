@@ -1,0 +1,113 @@
+CREATE TABLE `USUARIOS` (
+	`usu_id` int NOT NULL AUTO_INCREMENT,
+	`usu_nome` varchar(60) NOT NULL,
+	`usu_email` varchar(80) NOT NULL, 
+	`usu_senha` varchar(255) NOT NULL,
+	`usu_tipo` tinyint NOT NULL,
+	PRIMARY KEY (`usu_id`)
+);
+
+CREATE TABLE `PRODUTOS` (
+	`prd_id` int NOT NULL AUTO_INCREMENT,
+	`prd_nome` varchar(60) NOT NULL,
+	`prd_valor` DECIMAL(6,2) NOT NULL,
+	`prd_unidade` varchar(30) NOT NULL,
+	`ptp_id` int NOT NULL,
+	`prd_disponivel` bit NOT NULL,
+	`prd_img` varchar(255) NOT NULL, 
+	`prd_destaque` bit NOT NULL, 
+	`prd_img_destaque` varchar(255) NULL, 
+	`prd_descricao` varchar(100) NOT NULL, 
+	PRIMARY KEY (`prd_id`)
+);
+
+CREATE TABLE `PRODUTO_TIPOS` (
+	`ptp_id` int NOT NULL AUTO_INCREMENT,
+	`ptp_nome` varchar(20) NOT NULL, 
+	`ptp_icone` varchar(255) NOT NULL, 	
+	PRIMARY KEY (`ptp_id`)
+);
+
+CREATE TABLE `PEDIDOS` (
+	`ped_id` int NOT NULL AUTO_INCREMENT,
+	`ped_data` DATE NOT NULL,
+	`usu_id` int NOT NULL,
+	`cli_id` int NOT NULL,
+	`ped_tipo` tinyint NOT NULL,
+	`ped_status` tinyint NOT NULL,
+	`ped_desconto` DECIMAL(6,2) NOT NULL,
+	`ped_vlr_pago` DECIMAL(6,2) NOT NULL,
+	PRIMARY KEY (`ped_id`)
+);
+
+CREATE TABLE `PEDIDO_PRODUTOS` (
+	`ppd_id` int NOT NULL AUTO_INCREMENT,
+	`ppd_hora` TIME NOT NULL,
+	`ppd_qtd` int NOT NULL,
+	`ppd_valor` DECIMAL(6,2) NOT NULL,
+	`ppd_obs` varchar(50),
+	`ppd_status` tinyint NOT NULL,
+	`ped_id` int NOT NULL,
+	`prd_id` int NOT NULL,
+	PRIMARY KEY (`ppd_id`)
+);
+
+CREATE TABLE `CLIENTES` (
+	`usu_id` int NOT NULL,
+	`cli_cel` varchar(11) NOT NULL,
+	`cli_pts` int NOT NULL,
+	PRIMARY KEY (`usu_id`)
+);
+
+CREATE TABLE `ENDERECO_CLIENTES` (
+	`cli_id` int NOT NULL,
+	`end_logradouro` varchar(200) NOT NULL,
+	`end_num` varchar(20) NOT NULL,
+	`end_bairro` varchar(60) NOT NULL,
+	`end_complemento` varchar(60),
+	`cid_id` int NOT NULL,
+	PRIMARY KEY (`cli_id`)
+);
+
+CREATE TABLE `MESAS` (
+	`mes_id` int NOT NULL AUTO_INCREMENT,
+	`mes_nome` varchar(20) NOT NULL,
+	`mes_status` tinyint NOT NULL,
+	`mes_lugares` tinyint NOT NULL,
+	`ped_id` int NULL,
+	PRIMARY KEY (`mes_id`)
+);
+
+CREATE TABLE `CIDADES` (
+	`cid_id` int NOT NULL AUTO_INCREMENT,
+	`cid_nome` varchar(60) NOT NULL,
+	`cid_uf` char(2) NOT NULL,
+	PRIMARY KEY (`cid_id`)
+);
+
+ALTER TABLE `PRODUTOS` ADD CONSTRAINT `PRODUTOS_fk0` FOREIGN KEY (`ptp_id`) REFERENCES `PRODUTO_TIPOS`(`ptp_id`);
+
+ALTER TABLE `PEDIDOS` ADD CONSTRAINT `PEDIDOS_fk0` FOREIGN KEY (`usu_id`) REFERENCES `USUARIOS`(`usu_id`);
+
+ALTER TABLE `PEDIDOS` ADD CONSTRAINT `PEDIDOS_fk1` FOREIGN KEY (`cli_id`) REFERENCES `CLIENTES`(`usu_id`);
+
+ALTER TABLE `PEDIDO_PRODUTOS` ADD CONSTRAINT `PEDIDO_PRODUTOS_fk0` FOREIGN KEY (`ped_id`) REFERENCES `PEDIDOS`(`ped_id`);
+
+ALTER TABLE `PEDIDO_PRODUTOS` ADD CONSTRAINT `PEDIDO_PRODUTOS_fk1` FOREIGN KEY (`prd_id`) REFERENCES `PRODUTOS`(`prd_id`);
+
+ALTER TABLE `CLIENTES` ADD CONSTRAINT `CLIENTES_fk0` FOREIGN KEY (`usu_id`) REFERENCES `USUARIOS`(`usu_id`);
+
+ALTER TABLE `ENDERECO_CLIENTES` ADD CONSTRAINT `ENDERECO_CLIENTES_fk0` FOREIGN KEY (`cli_id`) REFERENCES `CLIENTES`(`usu_id`);
+
+ALTER TABLE `ENDERECO_CLIENTES` ADD CONSTRAINT `ENDERECO_CLIENTES_fk1` FOREIGN KEY (`cid_id`) REFERENCES `CIDADES`(`cid_id`);
+
+ALTER TABLE `MESAS` ADD CONSTRAINT `MESAS_fk0` FOREIGN KEY (`ped_id`) REFERENCES `PEDIDOS`(`ped_id`);
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+CREATE DATABASE bd_aula_node; 
+
+CREATE USER 'us_aula_node' IDENTIFIED BY '123456';
+
+GRANT ALL PRIVILEGES ON bd_aula_node.* TO us_aula_node;
